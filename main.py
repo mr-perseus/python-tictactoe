@@ -1,6 +1,5 @@
 from game import Game
 from square_filled_error import SquareFilledError
-from symbols import Symbols
 
 
 def main():
