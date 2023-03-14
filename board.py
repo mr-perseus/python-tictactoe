@@ -1,6 +1,7 @@
+from square_filled_error import SquareFilledError
 from symbols import Symbols
 
-triple_equals = [
+three_fields_equals_options = [
     ((0, 0), (0, 1), (0, 2)),
     ((1, 0), (1, 1), (1, 2)),
     ((2, 0), (2, 1), (2, 2)),
@@ -28,24 +29,29 @@ class Board:
         return output
 
     def move(self, player, row, column):
+        if self.__fields[row][column] != Symbols.Empty:
+            raise SquareFilledError
+
         self.__fields[row][column] = player
+        self.running = not self.__is_game_finished()
 
-        self.running = self.__check_game_state()
-
-    def __check_game_state(self):
-        for triple_equal in triple_equals:
-            if self.__check_triple_equal(triple_equal):
+    def __is_game_finished(self):
+        for option in three_fields_equals_options:
+            if self.__check_three_fields_equal(option):
                 return True
 
         return False
 
-    def __check_triple_equal(self, triple_equals_tuple):
-        first_tuple = triple_equals_tuple[0]
-        second_tuple = triple_equals_tuple[1]
-        third_tuple = triple_equals_tuple[2]
-        return Board.__triple_equals(self.__fields[first_tuple[0]][first_tuple[1]],
-                                     self.__fields[second_tuple[0]][second_tuple[1]],
-                                     self.__fields[third_tuple[0]][third_tuple[1]])
+    def __check_three_fields_equal(self, three_field_equal_option):
+        position1, position2, position3 = three_field_equal_option
+        position1_row, position1_column = position1
+        position2_row, position2_column = position2
+        position3_row, position3_column = position3
+        return Board.__triple_equals(
+            self.__fields[position1_row][position1_column],
+            self.__fields[position2_row][position2_column],
+            self.__fields[position3_row][position3_column]
+        )
 
     @staticmethod
     def __triple_equals(first, second, third):
