@@ -13,12 +13,13 @@ three_fields_equals_options = [
 ]
 
 
-class Board:
+class Game:
     def __init__(self):
-        self.__fields = [[Symbols.Empty for i in range(3)] for j in range(3)]
         self.running = True
+        self.__fields = [[Symbols.Empty for _ in range(3)] for _ in range(3)]
+        self.__player_to_move = Symbols.Cross
 
-    def __str__(self):
+    def get_board_string(self):
         output = "-" * 13 + "\n"
         for row in self.__fields:
             output += "|"
@@ -28,12 +29,23 @@ class Board:
 
         return output
 
-    def move(self, player, row, column):
+    def get_player_to_move_string(self):
+        return f"Player 1 ({self.__player_to_move.value})" \
+            if self.__player_to_move == Symbols.Cross \
+            else f"Player 2 ({self.__player_to_move.value})"
+
+    def fill_square(self, row, column):
         if self.__fields[row][column] != Symbols.Empty:
             raise SquareFilledError
 
-        self.__fields[row][column] = player
+        self.__fields[row][column] = self.__player_to_move
         self.running = not self.__is_game_finished()
+
+        if self.running:
+            self.switch_player_to_move()
+
+    def switch_player_to_move(self):
+        self.__player_to_move = Symbols.Cross if self.__player_to_move == Symbols.Circle else Symbols.Circle
 
     def __is_game_finished(self):
         for option in three_fields_equals_options:
@@ -47,7 +59,7 @@ class Board:
         position1_row, position1_column = position1
         position2_row, position2_column = position2
         position3_row, position3_column = position3
-        return Board.__triple_equals(
+        return Game.__triple_equals(
             self.__fields[position1_row][position1_column],
             self.__fields[position2_row][position2_column],
             self.__fields[position3_row][position3_column]
