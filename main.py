@@ -13,10 +13,12 @@ def main():
             col = int(input("col (0/1/2): "))
             assert 0 <= col <= 2
             game.fill_square(row, col)
+        except ValueError:
+            print("ERROR: Please enter a number!")
         except AssertionError:
-            print("Invalid square, please retry!")
+            print("ERROR: Invalid square, please retry!")
         except SquareFilledError:
-            print("Square is already filled, please use another one!")
+            print("ERROR: Square is already filled, please use another one!")
         else:
             print(game.get_board_string())
 

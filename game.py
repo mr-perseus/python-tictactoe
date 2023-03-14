@@ -30,9 +30,8 @@ class Game:
         return output
 
     def get_player_to_move_string(self):
-        return f"Player 1 ({self.__player_to_move.value})" \
-            if self.__player_to_move == SquareState.Cross \
-            else f"Player 2 ({self.__player_to_move.value})"
+        return ("Player 1" if self.__player_to_move == SquareState.Cross else "Player 2") + \
+            f" ({self.__player_to_move.value})"
 
     def fill_square(self, row, column):
         if self.__fields[row][column] != SquareState.Empty:
